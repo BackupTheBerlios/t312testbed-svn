@@ -1,1 +1,1 @@
-This the is the set of the one SA and its two SUs that implement the Apache Servicemix endpoints.
+This the is the set of the one Service Assembly (SA) and its two Service Units (SU) that implement the Apache Servicemix endpoints.
