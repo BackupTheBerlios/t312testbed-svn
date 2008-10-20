@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:http="http://servicemix.apache.org/http/1.0"
+       xmlns:asmmule1="urn:myproxy">
+
+  <http:endpoint service="asmmule1:conService"
+         endpoint="con1InOutEnd"
+		 targetService="asmmule1:provService"
+		 targetEndpoint="prov1InOutEnd"
+         role="consumer" 
+         locationURI="http://0.0.0.0:8181/services/GisService/"
+         defaultMep="http://www.w3.org/2004/08/wsdl/in-out"
+		 soapVersion="1.1"
+         soap="true" />             
+
+</beans>
