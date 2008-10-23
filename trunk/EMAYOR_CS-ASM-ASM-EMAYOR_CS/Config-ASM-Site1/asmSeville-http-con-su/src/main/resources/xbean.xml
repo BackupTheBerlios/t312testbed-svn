@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:http="http://servicemix.apache.org/http/1.0"
+       xmlns:soap="http://servicemix.apache.org/soap/1.0"
+       xmlns:asmseville="urn:myasm">
+
+  <http:endpoint service="asmseville:ConSevilleService"
+                 endpoint="conSevilleInOutEnd"
+		 		 targetService="asmseville:ProvSevilleService"
+		 		 targetEndpoint="provSevilleInOutEnd"
+                 role="consumer" 
+                 locationURI="https://0.0.0.0:20001/eMayorEJB/"
+                 defaultMep="http://www.w3.org/2004/08/wsdl/in-out"
+		 		 soapVersion="1.1"
+                 soap="true" >             
+
+	 <http:ssl>
+            <http:sslParameters
+                    needClientAuth="true"
+                    keyStore="file:conf/ServerSeville.keystore"
+                    keyStorePassword="123456" 
+                    trustStore="file:conf/ServerSeville.keystore"
+                    trustStorePassword="123456"  />
+     </http:ssl>
+
+	 <http:policies>
+            <soap:ws-security receiveAction="Signature"  username="serveralias" >
+               <soap:crypto>
+                    <bean class="org.apache.servicemix.soap.handlers.security.StandaloneCrypto">
+                      <property name="keyStoreUrl" value="classpath:serverstore.jks" />
+                      <property name="keyStorePassword" value="234567" />
+                      <property name="keyPassword" value="234567"/>
+                    </bean>
+               </soap:crypto>
+            </soap:ws-security>
+     </http:policies>
+
+
+   </http:endpoint>
+
+
+  <http:endpoint service="asmseville:ConSienaPxService"
+                 endpoint="conSienaPxInOutEnd"
+		 		 targetService="asmseville:ProvSienaPxService"
+		 		 targetEndpoint="provSienaPxInOutEnd"
+                 role="consumer" 
+                 locationURI="https://0.0.0.0:20002/eMayorEJB/"
+                 defaultMep="http://www.w3.org/2004/08/wsdl/in-out"
+		 		 soapVersion="1.1"
+                 soap="true" >             
+
+	 <http:ssl>
+            <http:sslParameters
+                  needClientAuth="false"
+                  wantClientAuth="false"
+                  keyStore="file:conf/ServerSiena.keystore"
+                  keyStorePassword="123456" 
+                  trustStore="file:conf/ServerSiena.keystore"
+                  trustStorePassword="123456"  />
+     </http:ssl>
+
+   </http:endpoint>
+
+</beans>
