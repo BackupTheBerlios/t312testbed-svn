@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>qualipso.wp31.asm.seville</groupId>
+  <artifactId>asmSeville</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>AsmSeville</name>
+  <url>http://www.qualipso.eu</url>
+  <modules>
+    <module>asmSeville-http-con-su</module>
+    <module>asmSeville-http-prov-su</module>
+    <module>asmSeville-sa</module>
+  </modules>
+</project>
