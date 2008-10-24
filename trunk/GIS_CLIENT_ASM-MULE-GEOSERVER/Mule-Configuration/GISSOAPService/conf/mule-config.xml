@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<mule-configuration id="Mule_Echo_Sample" version="1.0">
+
+	<description>
+		To view the WSDL for the GeoserverAdapter service go to -
+		http://localhost:8080/services/GisService?wsdl
+		(instead of localhost you may use the Mule server's IP - see line 51).
+	</description>
+
+	<!--
+		The system stream connector is used to send and receive information via the
+		System.in and System.out. Note this connector is only really useful for testing
+		purposes.
+		promptMessage - is what is written to the console
+		messageDelayTime - is the time in milliseconds before the user is prompted again.
+		These properties are set as bean properties on the connector.
+	-->
+	<connector name="SystemStreamConnector"
+		className="org.mule.providers.stream.SystemStreamConnector">
+		<properties>
+			<property name="promptMessage"
+				value="Ready, set...go!!! (Please enter something)" />
+			<property name="messageDelayTime" value="1000" />
+		</properties>
+	</connector>
+	<connector name="axisConnector"
+		className="org.mule.providers.soap.axis.AxisConnector">
+		<properties>
+			<property name="treatMapAsNamedParams" value="false" />
+		</properties>
+	</connector>
+	
+
+	<transformers>
+		<transformer name="HttpRequestToSoapRequest"
+			className="org.mule.providers.soap.transformers.HttpRequestToSoapRequest" />
+	</transformers>
+	
+
+	<!-- The Mule model initialises and manages UMO components	-->
+	<model name="gis">
+		<mule-descriptor name="GisService"
+			implementation="umo.GisService">
+			<inbound-router>
+				<endpoint address="stream://System.in" />
+				<!-- you must change the IP address to your Mule server's IP -->
+				<endpoint address="axis:http://150.254.149.232:8080/services"
+					transformers="HttpRequestToSoapRequest" />
+			</inbound-router>
+			<!-- An outbound router can have one or more router configurations
+			that can be invoked depending on business rules, message contents, headers
+			or ant other criteria.
+			The OutboundPassthroughRouter is a router that automatically sends every
+			message it receives -->
+			<!-- outbound-router>
+				<router
+					className="org.mule.routing.outbound.OutboundPassThroughRouter">
+					<endpoint address="stream://System.out" />
+				</router>
+			</outbound-router-->
+			<properties>
+			<!-- if you want you may change the IP address to your GeoServer IP -->
+				<property name="wmsServiceUrl"
+					value="http://150.254.173.202:8090/geoserver/wms" />
+				<property name="wfsServiceUrl"
+					value="http://150.254.173.202:8090/geoserver/wfs" />
+				<list name="serviceInterfaces">
+					<entry value="umo.IGisService" />
+				</list>
+				<map name="axisOptions">
+					<property name="wsdlPortType" value="geoPort" />
+					<property name="allowedMethods"
+						value="
+						getCapabilities, 
+						getCapabilitiesWithOptionalParams,
+						sendRequest,
+						getMap,
+						getFeature,
+						getMapWithOptionalParams,
+						describeFeatureType,
+						transaction
+						" />
+					<!--  
+						getFeatureWithOptionalParams, -->
+				</map>
+				<map name="soapMethods">
+					<property name="getCapabilities"
+						value="
+						service;string;in" />
+					<property name="getCapabilitiesWithOptionalParams"
+						value="
+						service;string;in,
+						version;string;in,
+						format;string;in,
+						updateSequence;string;in" />
+					<property name="sendRequest"
+						value="
+						service;string;in,
+						requestBody;string;in" />
+					<property name="getMap"
+						value="
+						version;string;in,
+						layers;string;in,
+						styles;string;in,
+						srs;string;in,
+						bbox;string;in,
+						width;string;in,
+						height;string;in,
+						format;string;in" />
+					<property name="getMapWithOptionalParams"
+						value="
+						version;string;in,
+						layers;string;in,
+						styles;string;in,
+						srs;string;in,
+						bbox;string;in,
+						width;string;in,
+						height;string;in,
+						format;string;in,
+						transparent;string;in,
+						bgColor;string;in,
+						exceptions;string;in,
+						time;string;in,
+						elevation;string;in" />
+					<property name="describeFeatureType"
+						value="
+						service;string;in" />
+					<property name="getFeature"
+						value="
+						service;string;in,
+						typenameList;qname{:Array:http://schemas.xmlsoap.org/soap/encoding/};in" />
+					<property name="transaction"
+						value="
+						requestBody;string;in" />
+				</map>
+			</properties>
+		</mule-descriptor>
+
+
+	</model>
+</mule-configuration>
