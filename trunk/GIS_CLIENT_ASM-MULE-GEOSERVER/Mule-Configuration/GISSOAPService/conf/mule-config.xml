@@ -48,7 +48,7 @@
 			<inbound-router>
 				<endpoint address="stream://System.in" />
 				<!-- you must change the IP address to your Mule server's IP -->
-				<endpoint address="axis:http://150.254.149.232:8080/services"
+				<endpoint address="axis:http://192.168.13.1:8080/services"
 					transformers="HttpRequestToSoapRequest" />
 			</inbound-router>
 			<!-- An outbound router can have one or more router configurations
@@ -65,9 +65,9 @@
 			<properties>
 			<!-- if you want you may change the IP address to your GeoServer IP -->
 				<property name="wmsServiceUrl"
-					value="http://150.254.173.202:8090/geoserver/wms" />
+					value="http://192.168.13.2:8080/geoserver/wms" />
 				<property name="wfsServiceUrl"
-					value="http://150.254.173.202:8090/geoserver/wfs" />
+					value="http://192.168.13.2:8080/geoserver/wfs" />
 				<list name="serviceInterfaces">
 					<entry value="umo.IGisService" />
 				</list>
